@@ -1,8 +1,9 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 # Install build dependencies (and vim + picocom for editing/debugging)
 RUN apt-get -qq update \
     && apt-get install -y gcc git wget make libncurses-dev flex bison gperf python python-serial \
+                          python-pip python-setuptools python-serial python-cryptography python-future python-pyparsing python-pyelftools \
                           cmake ninja-build \
                           ccache \
                           vim picocom \
@@ -25,10 +26,6 @@ RUN mkdir -p $ESP_TCHAIN_BASEDIR \
     && tar -xzf $ESP_TCHAIN_BASEDIR/esp32ulp-toolchain.tar.gz \
            -C $ESP_TCHAIN_BASEDIR/ \
     && rm $ESP_TCHAIN_BASEDIR/esp32ulp-toolchain.tar.gz
-
-# Setup IDF_PATH
-ENV IDF_PATH /esp/esp-idf
-RUN mkdir -p $IDF_PATH
 
 # Add the toolchain binaries to PATH
 ENV PATH $ESP_TCHAIN_BASEDIR/xtensa-esp32-elf/bin:$ESP_TCHAIN_BASEDIR/esp32ulp-elf-binutils/bin:$IDF_PATH/tools:$PATH
